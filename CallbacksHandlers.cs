@@ -12,6 +12,7 @@ namespace AtemSharp
         private void OnSwitcherConnected()
         {
             ButtonConnect.Content = "Connected";
+            ButtonConnect.IsEnabled = false;
             TextBoxSwitcherIPAddress.IsEnabled = false;
 
             string productName;
@@ -90,6 +91,7 @@ namespace AtemSharp
         private void OnSwitcherDisconnected()
         {
             ButtonConnect.Content = "Connect";
+            ButtonConnect.IsEnabled = true;
             TextBoxSwitcherIPAddress.IsEnabled = true;
             TextBoxProductName.Text = "";
 
