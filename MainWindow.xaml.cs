@@ -1,4 +1,6 @@
-﻿using System.Windows;
+﻿using System;
+using System.Collections.Generic;
+using System.Windows;
 using System.Runtime.InteropServices;
 using BMDSwitcherAPI;
 
@@ -6,54 +8,33 @@ namespace AtemSharp
 {
     public partial class MainWindow : Window
     {
-        private CBMDSwitcherDiscovery bSwitcherDiscovery;
+        private IBMDSwitcherDiscovery bSwitcherDiscovery;
         private IBMDSwitcher bSwitcher;
+        private IBMDSwitcherMixEffectBlock bSwitcherMixEffectBlock;
+
+        private SwitcherCallback bSwitcherCallback;
+        private MixEffectBlockCallback bMixEffectBlockCallback;
+        private List<InputCallback> bInputCallbacks = new List<InputCallback>();
+
+        private Dictionary<string, long> bInputIds = new Dictionary<string, long>();
 
         public MainWindow()
         {
             InitializeComponent();
+            InitializeEventHandlers();
         }
 
-        private void ButtonConnect_Click(object sender, RoutedEventArgs e)
+        private void InitializeEventHandlers()
         {
-            bSwitcherDiscovery = new CBMDSwitcherDiscovery();
-            if(bSwitcherDiscovery == null)
-            {
-                MessageBox.Show("Could not create Switcher Discovery Instance.\n"
-                    + "ATEM Switcher Software may not be installed.", "Error");
-                return;
-            }
+            bSwitcherCallback = new SwitcherCallback();
+            bMixEffectBlockCallback = new MixEffectBlockCallback();
 
-            string deviceAddress = TextBoxSwitcherIPAddress.Text;
-            _BMDSwitcherConnectToFailure failReason = 0;
-
-            try
-            {
-                bSwitcherDiscovery.ConnectTo(deviceAddress, out bSwitcher, out failReason);
-            }
-            catch(COMException)
-            {
-                switch(failReason)
-                {
-                    case _BMDSwitcherConnectToFailure.bmdSwitcherConnectToFailureNoResponse:
-                        MessageBox.Show("No response from Switcher", "Error");
-                        break;
-                    case _BMDSwitcherConnectToFailure.bmdSwitcherConnectToFailureIncompatibleFirmware:
-                        MessageBox.Show("Switcher has incompatible firmware", "Error");
-                        break;
-                    default:
-                        MessageBox.Show("Connection failed for unknown reason", "Error");
-                        break;
-                }
-                return;
-            }
-
-            ButtonConnect.Content = "Connected";
-            TextBoxSwitcherIPAddress.IsEnabled = false;
-
-            string bProductName;
-            bSwitcher.GetProductName(out bProductName);
-            TextBoxProductName.Text = bProductName;
+            bSwitcherCallback.SwitcherDisconnected += OnSwitcherDisconnected;
+            bMixEffectBlockCallback.PreviewInputChanged += OnPreviewInputChanged;
+            bMixEffectBlockCallback.ProgramInputChanged += OnProgramInputChanged;
+            bMixEffectBlockCallback.TransitionFramesRemainingChanged += OnTransitionFramesRemainingChanged;
+            bMixEffectBlockCallback.TransitionPositionChanged += OnTransitionPositionChanged;
+            bMixEffectBlockCallback.InTransitionChanged += OnInTransitionChanged;
         }
     }
 }

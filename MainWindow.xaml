@@ -1,7 +1,7 @@
 ﻿<Window
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" mc:Ignorable="d" x:Name="bMainWindow" x:Class="AtemSharp.MainWindow"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" mc:Ignorable="d" x:Class="AtemSharp.MainWindow"
         Title="AtemSharp" ResizeMode="CanMinimize" Width="400" Height="400">
     <Grid HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0" Height="360" Width="400">
         <StackPanel Margin="10,10,10,0" VerticalAlignment="Top" Orientation="Horizontal" HorizontalAlignment="Center" Width="340" Height="25">
@@ -13,58 +13,66 @@
             <Label Content="Switcher Name:" Margin="0" HorizontalAlignment="Left" VerticalAlignment="Center" Width="100" Height="25"/>
             <TextBox x:Name="TextBoxProductName" TextWrapping="Wrap" Width="200" HorizontalAlignment="Left" VerticalAlignment="Center" TextAlignment="Center" Margin="5,0,0,0" IsReadOnly="True"/>
         </StackPanel>
-        <StackPanel HorizontalAlignment="Center" Margin="10,110,0,0" VerticalAlignment="Top" Orientation="Horizontal" Height="40" Width="340">
-            <Button Content="Cam1" Width="40" Height="40" Margin="10,0,5,0" HorizontalAlignment="Left" VerticalAlignment="Center"/>
-            <Button Content="Cam2" Width="40" Height="40" Margin="5,0" HorizontalAlignment="Left" VerticalAlignment="Center"/>
-            <Button Content="Cam3" Width="40" Height="40" Margin="5,0" HorizontalAlignment="Left" VerticalAlignment="Center"/>
-            <Button Content="Cam4" Width="40" Height="40" Margin="5,0" HorizontalAlignment="Left" VerticalAlignment="Center"/>
-            <Button Content="Cam5" Width="40" Height="40" Margin="5,0" HorizontalAlignment="Left" VerticalAlignment="Center"/>
-            <Button Content="Cam6" Width="40" Height="40" Margin="5,0,10,0" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+        <StackPanel x:Name="StackPanelPreview1" HorizontalAlignment="Center" Margin="10,110,0,0" VerticalAlignment="Top" Orientation="Horizontal" Height="40" Width="340" IsEnabled="False">
+            <Button Content="Cam1" Width="40" Height="40" Margin="10,0,5,0" HorizontalAlignment="Left" VerticalAlignment="Center" Tag="Cam1" Click="ButtonPreview_Click"/>
+            <Button Content="Cam2" Width="40" Height="40" Margin="5,0" HorizontalAlignment="Left" VerticalAlignment="Center" Tag="Cam2" Click="ButtonPreview_Click"/>
+            <Button Content="Cam3" Width="40" Height="40" Margin="5,0" HorizontalAlignment="Left" VerticalAlignment="Center" Tag="Cam3" Click="ButtonPreview_Click"/>
+            <Button Content="Cam4" Width="40" Height="40" Margin="5,0" HorizontalAlignment="Left" VerticalAlignment="Center" Tag="Cam4" Click="ButtonPreview_Click"/>
+            <Button Content="Cam5" Width="40" Height="40" Margin="5,0" HorizontalAlignment="Left" VerticalAlignment="Center" Tag="Cam5" Click="ButtonPreview_Click"/>
+            <Button Content="Cam6" Width="40" Height="40" Margin="5,0,10,0" HorizontalAlignment="Left" VerticalAlignment="Center" Tag="Cam6" Click="ButtonPreview_Click"/>
         </StackPanel>
-        <Label Content="Program" HorizontalAlignment="Left" Margin="30,80,0,0" VerticalAlignment="Top" Width="60" Height="25"/>
-        <StackPanel HorizontalAlignment="Center" Margin="10,160,0,0" VerticalAlignment="Top" Orientation="Horizontal" Height="40" Width="340">
-            <Button Width="40" Height="40" Margin="10,0,5,0" HorizontalAlignment="Left" VerticalAlignment="Center" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Padding="1">
+        <Label Content="Preview" HorizontalAlignment="Left" Margin="30,80,0,0" VerticalAlignment="Top" Width="60" Height="25"/>
+        <StackPanel x:Name="StackPanelPreview2" HorizontalAlignment="Center" Margin="10,160,0,0" VerticalAlignment="Top" Orientation="Horizontal" Height="40" Width="340" IsEnabled="False">
+            <Button Width="40" Height="40" Margin="10,0,5,0" HorizontalAlignment="Left" VerticalAlignment="Center" Tag="Col1" Click="ButtonPreview_Click">
                 <TextBlock TextWrapping="Wrap" VerticalAlignment="Center" TextAlignment="Center" Padding="0,5,0,0" HorizontalAlignment="Center" Width="40" Height="40"><Run Text="Color"/><LineBreak/><Run Text="1"/></TextBlock>
             </Button>
-            <Button Width="40" Height="40" Margin="5,0" HorizontalAlignment="Left" VerticalAlignment="Center">
+            <Button Width="40" Height="40" Margin="5,0" HorizontalAlignment="Left" VerticalAlignment="Center" Tag="Col2" Click="ButtonPreview_Click">
                 <TextBlock HorizontalAlignment="Center" TextWrapping="Wrap" VerticalAlignment="Center" Width="40" Height="40" TextAlignment="Center" Padding="0,5,0,0"><Run Text="Color"/><LineBreak/><Run Text="2"/></TextBlock>
             </Button>
-            <Button Width="40" Height="40" Margin="5,0" HorizontalAlignment="Left" VerticalAlignment="Center">
+            <Button Width="40" Height="40" Margin="5,0" HorizontalAlignment="Left" VerticalAlignment="Center" Tag="MP1" Click="ButtonPreview_Click">
                 <TextBlock HorizontalAlignment="Center" TextWrapping="Wrap" VerticalAlignment="Center" Width="40" Height="40" Padding="0,5,0,0" TextAlignment="Center"><Run Text="Media"/><LineBreak/><Run Text="1"/></TextBlock>
             </Button>
-            <Button Width="40" Height="40" Margin="5,0" HorizontalAlignment="Left" VerticalAlignment="Center">
+            <Button Width="40" Height="40" Margin="5,0" HorizontalAlignment="Left" VerticalAlignment="Center" Tag="MP2" Click="ButtonPreview_Click">
                 <TextBlock TextWrapping="Wrap" Padding="0,5,0,0" TextAlignment="Center" UseLayoutRounding="False" Width="40" Height="40" HorizontalAlignment="Center" VerticalAlignment="Center"><Run Text="Media"/><LineBreak/><Run Text="2"/></TextBlock>
             </Button>
-            <Button Content="Bars" Width="40" Height="40" Margin="5,0" HorizontalAlignment="Left" VerticalAlignment="Center"/>
-            <Button Content="Black" Width="40" Height="40" Margin="5,0,10,0" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+            <Button Content="Bars" Width="40" Height="40" Margin="5,0" HorizontalAlignment="Left" VerticalAlignment="Center" Tag="Bars" Click="ButtonPreview_Click"/>
+            <Button Content="Black" Width="40" Height="40" Margin="5,0,10,0" HorizontalAlignment="Left" VerticalAlignment="Center" Tag="Blk" Click="ButtonPreview_Click"/>
         </StackPanel>
         <GridSplitter HorizontalAlignment="Left" Height="5" Margin="0,70,0,0" VerticalAlignment="Top" Width="400"/>
         <GridSplitter HorizontalAlignment="Left" Height="5" Margin="0,215,0,0" VerticalAlignment="Top" Width="400"/>
         <Label Content="Program" HorizontalAlignment="Left" Margin="30,225,0,0" VerticalAlignment="Top" Width="60" Height="25"/>
-        <StackPanel HorizontalAlignment="Center" Margin="35,255,25,0" VerticalAlignment="Top" Orientation="Horizontal" Height="40" Width="340">
-            <Button Content="Cam1" Width="40" Height="40" Margin="10,0,5,0" HorizontalAlignment="Left" VerticalAlignment="Center"/>
-            <Button Content="Cam2" Width="40" Height="40" Margin="5,0" HorizontalAlignment="Left" VerticalAlignment="Center"/>
-            <Button Content="Cam3" Width="40" Height="40" Margin="5,0" HorizontalAlignment="Left" VerticalAlignment="Center"/>
-            <Button Content="Cam4" Width="40" Height="40" Margin="5,0" HorizontalAlignment="Left" VerticalAlignment="Center"/>
-            <Button Content="Cam5" Width="40" Height="40" Margin="5,0" HorizontalAlignment="Left" VerticalAlignment="Center"/>
-            <Button Content="Cam6" Width="40" Height="40" Margin="5,0,10,0" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+        <StackPanel x:Name="StackPanelProgram1" HorizontalAlignment="Center" Margin="35,255,25,0" VerticalAlignment="Top" Orientation="Horizontal" Height="40" Width="340" IsEnabled="False">
+            <Button Content="Cam1" Width="40" Height="40" Margin="10,0,5,0" HorizontalAlignment="Left" VerticalAlignment="Center" Tag="Cam1" Click="ButtonProgram_Click"/>
+            <Button Content="Cam2" Width="40" Height="40" Margin="5,0" HorizontalAlignment="Left" VerticalAlignment="Center" Tag="Cam2" Click="ButtonProgram_Click"/>
+            <Button Content="Cam3" Width="40" Height="40" Margin="5,0" HorizontalAlignment="Left" VerticalAlignment="Center" Tag="Cam3" Click="ButtonProgram_Click"/>
+            <Button Content="Cam4" Width="40" Height="40" Margin="5,0" HorizontalAlignment="Left" VerticalAlignment="Center" Tag="Cam4" Click="ButtonProgram_Click"/>
+            <Button Content="Cam5" Width="40" Height="40" Margin="5,0" HorizontalAlignment="Left" VerticalAlignment="Center" Tag="Cam5" Click="ButtonProgram_Click"/>
+            <Button Content="Cam6" Width="40" Height="40" Margin="5,0,10,0" HorizontalAlignment="Left" VerticalAlignment="Center" Tag="Cam6" Click="ButtonProgram_Click"/>
         </StackPanel>
-        <StackPanel HorizontalAlignment="Center" Margin="35,305,25,0" VerticalAlignment="Top" Orientation="Horizontal" Height="40" Width="340">
-            <Button Width="40" Height="40" Margin="10,0,5,0" HorizontalAlignment="Left" VerticalAlignment="Center" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Padding="1">
+        <StackPanel x:Name="StackPanelProgram2" HorizontalAlignment="Center" Margin="35,305,25,0" VerticalAlignment="Top" Orientation="Horizontal" Height="40" Width="340" IsEnabled="False">
+            <Button Width="40" Height="40" Margin="10,0,5,0" HorizontalAlignment="Left" VerticalAlignment="Center" Tag="Col1" Click="ButtonProgram_Click">
                 <TextBlock TextWrapping="Wrap" VerticalAlignment="Center" TextAlignment="Center" Padding="0,5,0,0" HorizontalAlignment="Center" Width="40" Height="40"><Run Text="Color"/><LineBreak/><Run Text="1"/></TextBlock>
             </Button>
-            <Button Width="40" Height="40" Margin="5,0" HorizontalAlignment="Left" VerticalAlignment="Center">
+            <Button Width="40" Height="40" Margin="5,0" HorizontalAlignment="Left" VerticalAlignment="Center" Tag="Col2" Click="ButtonProgram_Click">
                 <TextBlock HorizontalAlignment="Center" TextWrapping="Wrap" VerticalAlignment="Center" Width="40" Height="40" TextAlignment="Center" Padding="0,5,0,0"><Run Text="Color"/><LineBreak/><Run Text="2"/></TextBlock>
             </Button>
-            <Button Width="40" Height="40" Margin="5,0" HorizontalAlignment="Left" VerticalAlignment="Center">
+            <Button Width="40" Height="40" Margin="5,0" HorizontalAlignment="Left" VerticalAlignment="Center" Tag="MP1" Click="ButtonProgram_Click">
                 <TextBlock HorizontalAlignment="Center" TextWrapping="Wrap" VerticalAlignment="Center" Width="40" Height="40" Padding="0,5,0,0" TextAlignment="Center"><Run Text="Media"/><LineBreak/><Run Text="1"/></TextBlock>
             </Button>
-            <Button Width="40" Height="40" Margin="5,0" HorizontalAlignment="Left" VerticalAlignment="Center">
+            <Button Width="40" Height="40" Margin="5,0" HorizontalAlignment="Left" VerticalAlignment="Center" Tag="MP2" Click="ButtonProgram_Click">
                 <TextBlock TextWrapping="Wrap" Padding="0,5,0,0" TextAlignment="Center" UseLayoutRounding="False" Width="40" Height="40" HorizontalAlignment="Center" VerticalAlignment="Center"><Run Text="Media"/><LineBreak/><Run Text="2"/></TextBlock>
             </Button>
-            <Button Content="Bars" Width="40" Height="40" Margin="5,0" HorizontalAlignment="Left" VerticalAlignment="Center"/>
-            <Button Content="Black" Width="40" Height="40" Margin="5,0,10,0" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+            <Button Content="Bars" Width="40" Height="40" Margin="5,0" HorizontalAlignment="Left" VerticalAlignment="Center" Tag="Bars" Click="ButtonProgram_Click"/>
+            <Button Content="Black" Width="40" Height="40" Margin="5,0,10,0" HorizontalAlignment="Left" VerticalAlignment="Center" Tag="Blk" Click="ButtonProgram_Click"/>
         </StackPanel>
-
     </Grid>
+    <Window.Resources>
+        <Style TargetType="{x:Type TextBlock}">
+            <Style.Triggers>
+                <Trigger Property="IsEnabled" Value="False">
+                    <Setter Property="Foreground" Value="Gray"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+    </Window.Resources>
 </Window>

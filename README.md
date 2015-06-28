@@ -1,6 +1,15 @@
 # AtemSharp
 AtemSharp is a ATEM Switcher Panel in C#.
 
+## Features
+- Connect to your ATEM Switcher
+- Show your switcher's name
+- Select preview source
+- Select program source
+
+## Known issues
+- The program crashes when the switcher unexpectedly disconnects.
+
 ## License
 The MIT License (MIT)
 
