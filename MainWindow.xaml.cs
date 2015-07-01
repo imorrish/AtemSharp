@@ -29,12 +29,18 @@ namespace AtemSharp
             bSwitcherCallback = new SwitcherCallback();
             bMixEffectBlockCallback = new MixEffectBlockCallback();
 
-            bSwitcherCallback.SwitcherDisconnected += OnSwitcherDisconnected;
-            bMixEffectBlockCallback.PreviewInputChanged += OnPreviewInputChanged;
-            bMixEffectBlockCallback.ProgramInputChanged += OnProgramInputChanged;
-            bMixEffectBlockCallback.TransitionFramesRemainingChanged += OnTransitionFramesRemainingChanged;
-            bMixEffectBlockCallback.TransitionPositionChanged += OnTransitionPositionChanged;
-            bMixEffectBlockCallback.InTransitionChanged += OnInTransitionChanged;
+            bSwitcherCallback.SwitcherDisconnected +=
+                () => Dispatcher.Invoke((Action)(() => OnSwitcherDisconnected()));
+            bMixEffectBlockCallback.PreviewInputChanged +=
+                () => Dispatcher.Invoke((Action)(() => OnPreviewInputChanged()));
+            bMixEffectBlockCallback.ProgramInputChanged +=
+                () => Dispatcher.Invoke((Action)(() => OnProgramInputChanged()));
+            bMixEffectBlockCallback.TransitionFramesRemainingChanged +=
+                () => Dispatcher.Invoke((Action)(() => OnTransitionFramesRemainingChanged()));
+            bMixEffectBlockCallback.TransitionPositionChanged +=
+                () => Dispatcher.Invoke((Action)(() => OnTransitionPositionChanged()));
+            bMixEffectBlockCallback.InTransitionChanged +=
+                () => Dispatcher.Invoke((Action)(() => OnInTransitionChanged()));
         }
     }
 }

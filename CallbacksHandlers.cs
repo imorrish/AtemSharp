@@ -57,7 +57,10 @@ namespace AtemSharp
                 bInputIds.Add(inputName, inputId);
 
                 InputCallback inputCallback = new InputCallback(input);
-                inputCallback.LongNameChanged += OnLongNameChanged;
+                input.AddCallback(inputCallback);
+                inputCallback.LongNameChanged +=
+                    () => Dispatcher.Invoke((Action)(() => OnLongNameChanged()));
+
                 bInputCallbacks.Add(inputCallback);
 
                 inputIterator.Next(out input);
@@ -99,6 +102,27 @@ namespace AtemSharp
             StackPanelPreview2.IsEnabled = false;
             StackPanelProgram1.IsEnabled = false;
             StackPanelProgram2.IsEnabled = false;
+
+            foreach (InputCallback inputCallback in bInputCallbacks)
+            {
+                inputCallback.Input.RemoveCallback(inputCallback);
+                inputCallback.LongNameChanged -=
+                    () => Dispatcher.Invoke((Action)(() => OnLongNameChanged()));
+            }
+            bInputIds.Clear();
+            bInputCallbacks.Clear();
+
+            if (bSwitcherMixEffectBlock != null)
+            {
+                bSwitcherMixEffectBlock.RemoveCallback(bMixEffectBlockCallback);
+                bSwitcherMixEffectBlock = null;
+            }
+
+            if (bSwitcher != null)
+            {
+                bSwitcher.RemoveCallback(bSwitcherCallback);
+                bSwitcher = null;
+            }
         }
 
         private void OnPreviewInputChanged()
