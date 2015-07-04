@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Windows;
+using System.Windows.Input;
 using System.Windows.Controls;
+using System.Windows.Media;
 using System.Runtime.InteropServices;
 using BMDSwitcherAPI;
 
@@ -19,10 +21,10 @@ namespace AtemSharp
             bSwitcher.GetProductName(out productName);
             TextBoxProductName.Text = productName;
 
-            StackPanelPreview1.IsEnabled = true;
-            StackPanelPreview2.IsEnabled = true;
-            StackPanelProgram1.IsEnabled = true;
-            StackPanelProgram2.IsEnabled = true;
+            GridProgram.IsEnabled = true;
+            GridPreview.IsEnabled = true;
+            SliderTransition.IsEnabled = true;
+            StackPanelTransition.IsEnabled = true;
 
             bSwitcher.AddCallback(bSwitcherCallback);
 
@@ -54,7 +56,9 @@ namespace AtemSharp
 
                 input.GetInputId(out inputId);
                 input.GetString(_BMDSwitcherInputPropertyId.bmdSwitcherInputPropertyIdShortName, out inputName);
-                bInputIds.Add(inputName, inputId);
+
+                bInputNamesById.Add(inputId, inputName);
+                bInputIdsByName.Add(inputName, inputId);
 
                 InputCallback inputCallback = new InputCallback(input);
                 input.AddCallback(inputCallback);
@@ -98,10 +102,10 @@ namespace AtemSharp
             TextBoxSwitcherIPAddress.IsEnabled = true;
             TextBoxProductName.Text = "";
 
-            StackPanelPreview1.IsEnabled = false;
-            StackPanelPreview2.IsEnabled = false;
-            StackPanelProgram1.IsEnabled = false;
-            StackPanelProgram2.IsEnabled = false;
+            GridProgram.IsEnabled = false;
+            GridPreview.IsEnabled = false;
+            SliderTransition.IsEnabled = false;
+            StackPanelTransition.IsEnabled = false;
 
             foreach (InputCallback inputCallback in bInputCallbacks)
             {
@@ -109,7 +113,9 @@ namespace AtemSharp
                 inputCallback.LongNameChanged -=
                     () => Dispatcher.Invoke((Action)(() => OnLongNameChanged()));
             }
-            bInputIds.Clear();
+
+            bInputNamesById.Clear();
+            bInputIdsByName.Clear();
             bInputCallbacks.Clear();
 
             if (bSwitcherMixEffectBlock != null)
@@ -125,14 +131,36 @@ namespace AtemSharp
             }
         }
 
-        private void OnPreviewInputChanged()
-        {
-
-        }
-
         private void OnProgramInputChanged()
         {
+            long programId;
+            bSwitcherMixEffectBlock.GetInt
+                (_BMDSwitcherMixEffectBlockPropertyId.bmdSwitcherMixEffectBlockPropertyIdProgramInput, out programId);
 
+            foreach (Button button in GridProgram.Children)
+            {
+                if (button.Background == Brushes.Coral)
+                    button.ClearValue(Button.BackgroundProperty);
+
+                if (button.Tag.ToString() == bInputNamesById[programId])
+                    button.Background = Brushes.Coral;
+            }
+        }
+
+        private void OnPreviewInputChanged()
+        {
+            long previewId;
+            bSwitcherMixEffectBlock.GetInt
+                (_BMDSwitcherMixEffectBlockPropertyId.bmdSwitcherMixEffectBlockPropertyIdPreviewInput, out previewId);
+
+            foreach (Button button in GridPreview.Children)
+            {
+                if (button.Background == Brushes.LightGreen)
+                    button.ClearValue(Button.BackgroundProperty);
+
+                if (button.Tag.ToString() == bInputNamesById[previewId])
+                    button.Background = Brushes.LightGreen;
+            }
         }
 
         private void OnTransitionFramesRemainingChanged()
@@ -142,7 +170,19 @@ namespace AtemSharp
 
         private void OnTransitionPositionChanged()
         {
+            if (!bMouseDown)
+            {
+                double position;
+                bSwitcherMixEffectBlock.GetFloat
+                    (_BMDSwitcherMixEffectBlockPropertyId.bmdSwitcherMixEffectBlockPropertyIdTransitionPosition, out position);
 
+                System.Diagnostics.Debug.WriteLine("transitionPosition: " + position);
+
+                SliderTransition.Value = position;
+
+                if (position == 1)
+                    SliderTransition.IsDirectionReversed = !SliderTransition.IsDirectionReversed;
+            }
         }
 
         private void OnInTransitionChanged()
@@ -192,22 +232,58 @@ namespace AtemSharp
             OnSwitcherConnected();
         }
 
+        private void ButtonProgram_Click(object sender, RoutedEventArgs e)
+        {
+            string inputName = ((Button)sender).Tag.ToString();
+            long inputId = bInputIdsByName[inputName];
+
+            bSwitcherMixEffectBlock.SetInt
+                (_BMDSwitcherMixEffectBlockPropertyId.bmdSwitcherMixEffectBlockPropertyIdProgramInput, inputId);
+        }
+
         private void ButtonPreview_Click(object sender, RoutedEventArgs e)
         {
             string inputName = ((Button)sender).Tag.ToString();
-            long inputId = bInputIds[inputName];
+            long inputId = bInputIdsByName[inputName];
 
             bSwitcherMixEffectBlock.SetInt
                 (_BMDSwitcherMixEffectBlockPropertyId.bmdSwitcherMixEffectBlockPropertyIdPreviewInput, inputId);
         }
 
-        private void ButtonProgram_Click(object sender, RoutedEventArgs e)
+        private void SliderTransition_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            string inputName = ((Button)sender).Tag.ToString();
-            long inputId = bInputIds[inputName];
+            bMouseDown = true;
+        }
 
-            bSwitcherMixEffectBlock.SetInt
-                (_BMDSwitcherMixEffectBlockPropertyId.bmdSwitcherMixEffectBlockPropertyIdProgramInput, inputId);
+        private void SliderTransition_MouseUp(object sender, MouseButtonEventArgs e)
+        {
+            bMouseDown = false;
+        }
+
+        private void SliderTransition_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            if (bMouseDown)
+            {
+                double position = ((Slider)sender).Value;
+
+                System.Diagnostics.Debug.WriteLine("position: " + position);
+
+                if (position == 1)
+                    ((Slider)sender).IsDirectionReversed = !((Slider)sender).IsDirectionReversed;
+
+                bSwitcherMixEffectBlock.SetFloat
+                    (_BMDSwitcherMixEffectBlockPropertyId.bmdSwitcherMixEffectBlockPropertyIdTransitionPosition, position);
+            }
+        }
+
+        private void ButtonAuto_Click(object sender, RoutedEventArgs e)
+        {
+            bSwitcherMixEffectBlock.PerformAutoTransition();
+        }
+
+        private void ButtonCut_Click(object sender, RoutedEventArgs e)
+        {
+            bSwitcherMixEffectBlock.PerformCut();
         }
     }
 }
