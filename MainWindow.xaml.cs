@@ -19,6 +19,7 @@ namespace AtemSharp
         private List<InputCallback> bInputCallbacks = new List<InputCallback>();
 
         private bool bMouseDown = false;
+        private bool bInTransition = false;
 
         private Dictionary<long, string> bInputNamesById = new Dictionary<long, string>();
         private Dictionary<string, long> bInputIdsByName = new Dictionary<string, long>();

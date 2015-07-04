@@ -153,13 +153,15 @@ namespace AtemSharp
             bSwitcherMixEffectBlock.GetInt
                 (_BMDSwitcherMixEffectBlockPropertyId.bmdSwitcherMixEffectBlockPropertyIdPreviewInput, out previewId);
 
+            SolidColorBrush brush = bInTransition ? Brushes.Coral : Brushes.LightGreen;
+
             foreach (Button button in GridPreview.Children)
             {
-                if (button.Background == Brushes.LightGreen)
+                if (button.Background == brush)
                     button.ClearValue(Button.BackgroundProperty);
 
                 if (button.Tag.ToString() == bInputNamesById[previewId])
-                    button.Background = Brushes.LightGreen;
+                    button.Background = brush;
             }
         }
 
@@ -176,8 +178,6 @@ namespace AtemSharp
                 bSwitcherMixEffectBlock.GetFloat
                     (_BMDSwitcherMixEffectBlockPropertyId.bmdSwitcherMixEffectBlockPropertyIdTransitionPosition, out position);
 
-                System.Diagnostics.Debug.WriteLine("transitionPosition: " + position);
-
                 SliderTransition.Value = position;
 
                 if (position == 1)
@@ -187,7 +187,22 @@ namespace AtemSharp
 
         private void OnInTransitionChanged()
         {
+            int inTransition;
+            bSwitcherMixEffectBlock.GetFlag
+                (_BMDSwitcherMixEffectBlockPropertyId.bmdSwitcherMixEffectBlockPropertyIdInTransition, out inTransition);
 
+            if (inTransition == 1)
+            {
+                bInTransition = true;
+                ButtonAuto.Background = Brushes.Coral;
+            }
+            else
+            {
+                bInTransition = false;
+                ButtonAuto.ClearValue(Button.BackgroundProperty);
+            }
+
+            OnPreviewInputChanged();
         }
 
         private void OnLongNameChanged()
@@ -265,8 +280,6 @@ namespace AtemSharp
             if (bMouseDown)
             {
                 double position = ((Slider)sender).Value;
-
-                System.Diagnostics.Debug.WriteLine("position: " + position);
 
                 if (position == 1)
                     ((Slider)sender).IsDirectionReversed = !((Slider)sender).IsDirectionReversed;
